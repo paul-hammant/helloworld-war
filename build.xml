@@ -4,6 +4,7 @@
 	<property name="libcompile" location="lib/compile" />
 	<property name="libtestcompile" location="lib/testCompile" />
 	<property name="libruntime" location="lib/runtime" />
+	<property name="libembed" location="lib/embed" />
 	<property name="web" location="web" />
 	<property name="webxml" location="${web}/WEB-INF/web.xml" />
 	<property name="build" location="build" />
@@ -23,6 +24,21 @@
 		</fileset>
 	</path>
 
+	<path id="testClasspath">
+		<fileset dir="${libruntime}">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${libtestcompile}">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${libcompile}">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${libembed}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
 	<target name="clean">
 		<delete dir="${build}" />
 	</target>
@@ -34,20 +50,42 @@
 	</target>
 
 	<target name="compile" depends="init">
-		<javac includeantruntime="false" 
-		srcdir="${src}" destdir="${classes}" source="${source}" target="${target}">
+		<javac includeantruntime="false" srcdir="${src}" destdir="${classes}" source="${source}" target="${target}">
 			<classpath refid="classpath" />
 		</javac>
 	</target>
 
-	<target name="testCompile" depends="init">
-		<javac includeantruntime="false"
-		srcdir="${test}" destdir="${testClasses}" source="${source}" target="${target}">
+	<target name="testCompile" depends="compile">
+		<javac includeantruntime="false" srcdir="${test}" destdir="${testClasses}" source="${source}" target="${target}">
 			<classpath refid="testClasspath" />
 		</javac>
 	</target>
 
-	<target name="war" depends="compile, testCompile">
+	<target name="test" depends="testCompile">
+
+		<pathconvert property="classpathProp" refid="testClasspath"/>
+
+		<echo>Classpath is ${classpathProp}</echo>
+
+		<junit printsummary="yes" haltonfailure="yes" outputtoformatters="yes" showoutput="true">
+
+			<classpath location="lib/testCompile/junit-4.12.jar" />
+			<classpath>
+				<pathelement path="testClasspath"/>
+				<pathelement path="${testClasses}"/>
+			</classpath>
+
+			<test name="mypackage.HWIntegrationTest"
+				  haltonfailure="yes" outfile="result">
+
+				<formatter type="plain" usefile="false" />
+
+			</test>
+
+		</junit>
+	</target>
+
+	<target name="war" depends="test">
 		<war destfile="${build}/${ant.project.name}-${version}.war"
 			webxml="${webxml}">
 			<fileset dir="${web}" />
