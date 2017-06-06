@@ -56,8 +56,9 @@
 	</target>
 
 	<target name="testCompile" depends="compile">
-		<javac includeantruntime="false" srcdir="${test}" destdir="${testClasses}" source="${source}" target="${target}">
+		<javac includeantruntime="true" srcdir="${test}" destdir="${testClasses}" source="${source}" target="${target}">
 			<classpath refid="testClasspath" />
+			<classpath location="${classes}"/>
 		</javac>
 	</target>
 
@@ -69,12 +70,10 @@
 
 		<junit printsummary="yes" haltonfailure="yes" outputtoformatters="yes" showoutput="true">
 
-			<classpath location="lib/testCompile/junit-4.12.jar" />
-			<classpath>
-				<pathelement path="testClasspath"/>
-				<pathelement path="${testClasses}"/>
-			</classpath>
-
+			<classpath refid="testClasspath"/>
+			<classpath location="${classes}"/>
+			<classpath location="${testClasses}"/>
+			
 			<test name="mypackage.HWIntegrationTest"
 				  haltonfailure="yes" outfile="result">
 
