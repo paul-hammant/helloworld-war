@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebListener;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 
+import com.google.common.collect.ImmutableSet;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -44,7 +45,7 @@ public class WebAppUnassembled
     
     
 
-	private static void loadAnnotations(WebAppContext context) throws Exception {
+	static void loadAnnotations(WebAppContext context) throws Exception {
 		// Add annotations from classpath, using only file resources
 		// (thus using only classes from this project's src folder).
 		// NOTE: This mimics the annotation behaviour of loading a WAR,
@@ -52,7 +53,11 @@ public class WebAppUnassembled
 		// (some annotations and/or annotate elements are not implemented).
 		ClassPath classpath = ClassPath.from(WebAppUnassembled.class
 				.getClassLoader());
-		for (ClassPath.ClassInfo classInfo : classpath.getTopLevelClasses()) {
+		ImmutableSet<ClassPath.ClassInfo> topLevelClasses = classpath.getTopLevelClasses();
+		for (ClassPath.ClassInfo classInfo : topLevelClasses) {
+			if (!classInfo.getPackageName().startsWith("mypackage")) {
+				continue;
+			}
 			if (classInfo.url().toString().startsWith("file:")) {
 				String cname = classInfo.getName();
 				Class<?> type = Class.forName(cname);

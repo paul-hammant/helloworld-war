@@ -1,11 +1,14 @@
 <project name="helloworld" default="war">
 	<property name="src" location="src/java" />
+	<property name="test" location="src/test" />
 	<property name="libcompile" location="lib/compile" />
+	<property name="libtestcompile" location="lib/testCompile" />
 	<property name="libruntime" location="lib/runtime" />
 	<property name="web" location="web" />
 	<property name="webxml" location="${web}/WEB-INF/web.xml" />
 	<property name="build" location="build" />
 	<property name="classes" location="${build}/classes" />
+	<property name="testClasses" location="${build}/testClasses" />
 
 	<property name="version" value="0.1-dev" />
 	<property name="source" value="1.7" />
@@ -27,6 +30,7 @@
 	<target name="init" depends="clean">
 		<mkdir dir="${build}" />
 		<mkdir dir="${classes}" />
+		<mkdir dir="${testClasses}" />
 	</target>
 
 	<target name="compile" depends="init">
@@ -36,7 +40,14 @@
 		</javac>
 	</target>
 
-	<target name="war" depends="compile">
+	<target name="testCompile" depends="init">
+		<javac includeantruntime="false"
+		srcdir="${test}" destdir="${testClasses}" source="${source}" target="${target}">
+			<classpath refid="testClasspath" />
+		</javac>
+	</target>
+
+	<target name="war" depends="compile, testCompile">
 		<war destfile="${build}/${ant.project.name}-${version}.war"
 			webxml="${webxml}">
 			<fileset dir="${web}" />
