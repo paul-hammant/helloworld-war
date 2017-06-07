@@ -1,49 +1,23 @@
-# Helloworld WAR
+# 'Hello World' Ant + Jetty + Rest Assured Integration Test
 
-### A example Java WAR project / template project
 
-Contains:
-- Helloworld servlet (using Annotations)
-- an example static html file
-- a most basic web.xml
-- compile time servlet-api.jar (so doesn't need Java EE)
-- Ant build.xml that builds the WAR
-- Simple logging, with slf4j-api and sl4j-simple
-- Jetty embedded server for running directly in Eclipe
+Nte: Java 8 needed.
 
-It should work with Java 6, 7 and upwards.
-It doesn't contain any dependendency injection specific frameworks,
-such as Spring or Guice. (Although you can add this easily).
+Put these three in Ant's lib directory.
 
-The nature is an Eclipse project,
-it contains a minimal .classpath and .project file.
+1. hamcrest-core-1.3.jar
+2. hamcrest-library-1.3.jar
+3. junit-4.12.jar
 
-#### Building the WAR
-To build a WAR that you can deploy (for example to Tomcat or Jetty),
-you can run 'ant' from the project root.
-By default the Java source and target version is **1.7**,
-this can be changed in the build.xml file.
+I don't know why that's needed, just that Ant will 
+fail if you don't.
 
-The WAR is tested to work with Apache Tomcat 7 and Jettyrunner 9.
+Then:
 
-#### Running in Eclipse
-Typically, during development, you want run the application directly
-in Eclipse, for quick results and easy debugging.
-(Including working breakpoints and hot code swap).
+```
+ant test
+```
 
-This is possible thanks to embedding Jetty.
-For this, run 'WebAppUnassembled' as a Java application.
 
-Note that it is not trivial to dynamically load the annotated servlets this way.
-(Most examples around the web involve around creating a war file, which defeat some purposes).
-However WebAppUnassembled tries a best effort to do this by using Classpath scanning,
-still picking up the essential annotations with basic options.
-The annotations are WebServlet, WebFilter and WebListener.
 
-It uses the Google Guava helper library, which is a nice utility to have anyway.
-(If you want to call it from within your web app itself, move the library to lib/runtime
-or it won't be included in the war file when you build it).
-
-#### LICENSE
-Licensed under [Eclipse Public License](http://www.eclipse.org/legal/epl-v10.html).
 
