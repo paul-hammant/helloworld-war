@@ -1,7 +1,7 @@
 # 'Hello World' Ant + Jetty + Rest Assured Integration Test
 
 
-Nte: Java 8 needed.
+Nte: Java 7 needed.
 
 Put these three in Ant's lib directory.
 

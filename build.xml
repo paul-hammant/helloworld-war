@@ -12,8 +12,8 @@
 	<property name="testClasses" location="${build}/testClasses" />
 
 	<property name="version" value="0.1-dev" />
-	<property name="source" value="1.8" />
-	<property name="target" value="1.8" />
+	<property name="source" value="1.7" />
+	<property name="target" value="1.7" />
 
 	<path id="classpath">
 		<fileset dir="${libcompile}">
